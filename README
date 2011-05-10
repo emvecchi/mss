@@ -1,0 +1,13 @@
+Code for creating semantic space models from the combination of images and text.
+
+---------------------------------------------------------------------------
+
+words_with_images.py: Preprocess the data, i.e: create the unique ID for the images and labels. 
+
+phow_alg.m: Extract visual features SIFT from Images
+
+BOVW.py: construct the Bag Of Visual Words from the output of phow_alg.m
+
+CosineSimilarity.py: Compute semantic similarity 
+
+MatrixCreator.py: Generate the combination model of vision-based semantics and text-based semantics
