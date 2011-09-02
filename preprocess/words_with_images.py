@@ -3,15 +3,16 @@ import glob, os, shutil, uuid, sys
 
 def filter_dataset(dataset_path):
     '''
-    Dataset_path must contain two folders: ./images & ./labels.
-    Images are in '.jpg' format, labels in '.jpg.desc' format (maybe labels' format has to be changed).filter_dataset creates 
-    a new folder ('./images_to_sift'), where just images labeled with words specified by the parameter words_list are put with a 
-    unique, robust-for-sorting id, ready to be sifted.
+    Dataset_path must contain one folder called 'original_data', with two subfolders 'images' and 'labels'.
+    Images are in '.jpg' format, labels in '.jpg.desc' format (maybe labels' format has to be changed).
     '''
+    
 
-    os.mkdir(os.path.join(dataset_path, 'uuid_labels'))
-    os.mkdir(os.path.join(dataset_path, 'uuid_images'))
-    num_files = len([f for f in os.listdir(os.path.join(dataset_path, 'labels'))])
+    preprocessed_path = os.path.join(dataset_path, 'preprocessed')
+    os.mkdir(preprocessed_path)
+    os.mkdir(os.path.join(preprocessed_path, 'labels'))
+    os.mkdir(os.path.join(preprocessed_path, 'images'))
+    num_files = len([f for f in os.listdir(os.path.join(dataset_path, 'original_data/labels'))])
 
     # create a unique name for each label/image
     print num_files
@@ -22,7 +23,7 @@ def filter_dataset(dataset_path):
     count = 0
     words_with_images = {}
 
-    for file_path in glob.glob(os.path.join(dataset_path, 'labels/*.desc')):
+    for file_path in glob.glob(os.path.join(dataset_path, 'original_data/labels/*.desc')):
 	file = open(file_path, "r")
 	for token in file:
 	    #print token
@@ -32,11 +33,11 @@ def filter_dataset(dataset_path):
 	    file_name = os.path.basename(file_path)
            
             image_name = file_name[:-5] #esp
-            image_path = os.path.join(dataset_path, 'images/', image_name)
-            uuid_label = str(UUIDS[count]) #esp
-            uuid_image = str(UUIDS[count]) + '.jpg'
-	    shutil.copy(str(file_path), os.path.join(dataset_path,'uuid_labels', uuid_label))
-            shutil.copy(str(image_path), os.path.join(dataset_path,'uuid_images', uuid_image))
+            image_path = os.path.join(dataset_path, 'original_data/images/', image_name)
+            label = str(UUIDS[count]) #esp
+            image = str(UUIDS[count]) + '.jpg'
+	    shutil.copy(str(file_path), os.path.join(preprocessed_path,'labels', uuid_label))
+            shutil.copy(str(image_path), os.path.join(preprocessed_path,'images', uuid_image))
 	    count += 1
 	    break
         file.close()
