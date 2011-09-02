@@ -36,8 +36,8 @@ def filter_dataset(dataset_path):
             image_path = os.path.join(dataset_path, 'original_data/images/', image_name)
             label = str(UUIDS[count]) #esp
             image = str(UUIDS[count]) + '.jpg'
-	    shutil.copy(str(file_path), os.path.join(preprocessed_path,'labels', uuid_label))
-            shutil.copy(str(image_path), os.path.join(preprocessed_path,'images', uuid_image))
+	    shutil.copy(str(file_path), os.path.join(preprocessed_path,'labels', label))
+            shutil.copy(str(image_path), os.path.join(preprocessed_path,'images', image))
 	    count += 1
 	    break
         file.close()
