@@ -122,7 +122,8 @@ thresh = [ lowT highT];
 gradDir = 1;
 indxs = find(sDiscreteAngles == gradDir);
 
-binCounts{1} = indxs ;
+counts = size(indxs) ;
+binCounts{1} = counts(1) ;
 
 slp = sSlope(indxs);
 
@@ -142,7 +143,8 @@ sEdgepoints(okIndxs) = 1;
 gradDir = 2;
 indxs = find(sDiscreteAngles == gradDir);
 
-binCounts{2} = indxs ;
+counts = size(indxs) ;
+binCounts{2} = counts(1) ;
 
 invSlp = 1 ./ sSlope(indxs);
 
@@ -163,7 +165,8 @@ sEdgepoints(okIndxs) = 1;
 gradDir = 3;
 indxs = find(sDiscreteAngles == gradDir);
 
-binCounts{3} = indxs ;
+counts = size(indxs) ;
+binCounts{3} = counts(1) ;
 
 invSlp = 1 ./ sSlope(indxs);
 
@@ -184,7 +187,8 @@ sEdgepoints(okIndxs) = 1;
 gradDir = 4;
 indxs = find(sDiscreteAngles == gradDir);
 
-binCounts{4} = indxs ;
+counts = size(indxs) ;
+binCounts{4} = counts(1);
 
 slp = sSlope(indxs);
 
@@ -199,6 +203,8 @@ gDiff2 = slp.*(sNorm(indxs)-sNorm(indxs-m+1)) + (1-slp).*(sNorm(indxs)-sNorm(ind
 okIndxs = indxs( gDiff1 >=0 & gDiff2 >= 0);
 sEdgepoints(okIndxs) = 1;
 
+
+% TODO: binCounts normalization
 
 %HYSTERESIS PART...
 
