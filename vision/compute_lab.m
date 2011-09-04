@@ -3,8 +3,7 @@ function compute_lab
 % Add texton path where to find anigauss
 %path(path, '/home/elia.bruni/google/data_sets/mir/1m/scripts/texton')
 
-conf.calDir = '/Users/eliabruni/data/farhadi/ESP-ImageSet/images' ;
-%conf.calDir = '/Users/eliabruni/data/esp/test/input/esp_sample' ;
+conf.calDir = '/Users/eliabruni/data/esp/test/input/esp_sample' ;
 conf.dataDir = '/Users/eliabruni/data/esp/test/ouput/lab' ;
 conf.autoDownloadData = false ;
 conf.numTrain = 9 ;
@@ -33,6 +32,8 @@ vl_twister('state',conf.randSeed) ;
 classes = dir(conf.calDir) ;
 classes = classes([classes.isdir]) ;
 classes = {classes.name} ;
+
+colorNodes = load('/Users/eliabruni/data/farhadi/feature_extraction/colorClusters.mat') ;
 
 images = {} ;
 imageClass = {} ;
@@ -68,16 +69,17 @@ model.vocab = [] ;
   hists = {} ;
   iter = 0 ;
   for ii = 1:length(images)
-    if mod(ii, 100) == 0
+    if mod(ii, 10) == 0
       fprintf('Processing %s (%.2f %%)\n', images{ii}, 100 * ii / length(images)) ;
     end
 
-    im = imread(fullfile(conf.calDir, images{ii})) ;
+    im = imread(fullfile(conf.calDir, images{ii}));
+    im = standardizeImage(im) ;
+    
     hists{ii - (iter * blockSize)} = getColorImage(im, colorNodes);
-
-
+    
     if mod(ii, blockSize) == 0
-        tmpHists = cat(2, hists{:}) ;
+        tmpHists = cat(1, hists{:}) ;
         tmpHists = rot90(tmpHists) ;
         histName = histsNames{ii/blockSize} ;
         eval([histName ' = tmpHists;' ]) ;
@@ -103,44 +105,67 @@ model.vocab = [] ;
   save(conf.histPath,'ZZZZZZZZZZZZZZZZZZZZ') ;
 
 
-
-
-
 % -------------------------------------------------------------------------
-function im = standarizeImage(im)
+function im = standardizeImage(im)
 % -------------------------------------------------------------------------
 
-% im = rgb2gray(im) ;
-%im = im2bw(im) ;
-
+im = im2double(im) ;
 if size(im,1) > 480, im = imresize(im, [480 NaN]) ; end
 
 % -------------------------------------------------------------------------
 function counts = getColorImage(im, colorNodes)
 % -------------------------------------------------------------------------
-% colim = getColorImage(im, colorNodes)
 
-[L, a, b] = rgb2lab(im);
+if(size(im,3)==3)
+    [L, a, b] = rgb2lab(im);
 
-%L = (L - mean(L(:)));% / std(L);
-%a = (a - mean(a(:)));% / std(a);
-%b = (b - mean(b(:)));% / std(b);        
+    %L = (L - mean(L(:)));% / std(L);
+    %a = (a - mean(a(:)));% / std(a);
+    %b = (b - mean(b(:)));% / std(b);        
 
-feat = single(cat(2, L(:)/2, a(:), b(:))/100); 
+    feat = single(cat(2, L(:)/2, a(:), b(:))/100); 
 
-%idx = getNearestHierarchy(feat, colorNodes);
-% leafnum = zeros(numel(colorNodes), 1);
-% leafnum([colorNodes.isleaf]) = 1:sum([colorNodes.isleaf]);
-% idx = leafnum(idx);
+    %idx = getNearestHierarchy(feat, colorNodes);
+    % leafnum = zeros(numel(colorNodes), 1);
+    % leafnum([colorNodes.isleaf]) = 1:sum([colorNodes.isleaf]);
+    % idx = leafnum(idx);
+    
+    idx = getNearest(feat, colorNodes.centers);
 
-idx = getNearest(feat, colorNodes.centers);
-
-colorim = reshape(idx, [size(im, 1) size(im, 2)]);
+    colorim = reshape(idx, [size(im, 1) size(im, 2)]);
+else 
+    colorim = [] ; 
+end
 
 % Count how many times each cluster has been encountered in the image.
 counts = zeros(1,128) ;
 for i = 1:size(colorim,1)
-    counts{colorim(i)} = counts{colorim(i)} + 1 ;
+    counts(colorim(i)) = counts(colorim(i)) + 1 ;
 end
 % Normalization
-counts = single(counts/sum(counts)) ;
+%counts = single(counts/sum(counts)) ;
+
+% -------------------------------------------------------------------------
+function idx = getNearest(data, centers)
+% -------------------------------------------------------------------------
+
+if 0 && exist('getNearest_mex', 'file')
+    idx = getNearest_mex(int32(size(data, 1)), int32(size(data, 2)), ...
+        int32(size(centers, 1)), double(data)', double(centers)');
+    idx = idx(:);
+else
+
+    if 0   
+        idx = kdtreeidx(double(centers), double(data));
+    end
+        
+    centers = centers';
+    centerssq = sum(centers.^2, 1);
+
+    idx = zeros(size(data, 1), 1);
+    for k = 1:size(data, 1)
+        dist = centerssq - 2*data(k, :) * centers;
+        [tmp, idx(k)] = min(dist);
+    end
+
+end
