@@ -1,30 +1,15 @@
 function compute_lab
 
-% Add texton path where to find anigauss
-%path(path, '/home/elia.bruni/google/data_sets/mir/1m/scripts/texton')
-
 conf.calDir = '/Users/eliabruni/data/esp/test/input/esp_sample' ;
 conf.dataDir = '/Users/eliabruni/data/esp/test/ouput/lab' ;
-conf.autoDownloadData = false ;
-conf.numTrain = 9 ;
 conf.numClasses = 1 ;
-conf.numWords = 4 ;
-conf.numSpatialX = 1 ;
-conf.numSpatialY = 1 ;
-conf.quantizer = 'kdtree' ;
-%conf.phowOpts = {'Verbose', 2, 'Step', 5} ;
 
 conf.prefix = 'baseline' ;
 conf.randSeed = 1 ;
 
-
-conf.vocabPath = fullfile(conf.dataDir, [conf.prefix '-vocab.mat']) ;
 conf.modelPath = fullfile(conf.dataDir, [conf.prefix '-model.mat']) ;
 conf.resultPath = fullfile(conf.dataDir, [conf.prefix '-result']) ;
 
-randn('state',conf.randSeed) ;
-rand('state',conf.randSeed) ;
-vl_twister('state',conf.randSeed) ;
 
 % --------------------------------------------------------------------
 %                                                           Setup data
@@ -46,13 +31,6 @@ end
 imageClass = cat(2, imageClass{:}) ;
 model.classes = classes ;
 
-model.classes = classes ;
-model.numSpatialX = conf.numSpatialX ;
-model.numSpatialY = conf.numSpatialY ;
-model.quantizer = conf.quantizer ;
-model.vocab = [] ;
-
-  
 % --------------------------------------------------------------------
 %                                           Compute spatial histograms
 % --------------------------------------------------------------------
@@ -91,11 +69,10 @@ model.vocab = [] ;
         tmpHists = {} ;
         histName = {} ;
         iter = iter + 1 ;
-
     end
-
   end
-  tmpHists = cat(2, hists{:}) ;
+  
+  tmpHists = cat(1, hists{:}) ;
   tmpHists = rot90(tmpHists) ;
 
   eval(['ZZZZZZZZZZZZZZZZZZZZ' '= tmpHists;' ]) ;
@@ -103,7 +80,7 @@ model.vocab = [] ;
   conf.prefix = 'ZZZZZZZZZZZZZZZZZZZZ' ;
   conf.histPath = fullfile(conf.dataDir, [conf.prefix '.mat']) ;
   save(conf.histPath,'ZZZZZZZZZZZZZZZZZZZZ') ;
-
+  
 
 % -------------------------------------------------------------------------
 function im = standardizeImage(im)
@@ -143,7 +120,7 @@ for i = 1:size(colorim,1)
     counts(colorim(i)) = counts(colorim(i)) + 1 ;
 end
 % Normalization
-%counts = single(counts/sum(counts)) ;
+counts = single(counts/sum(counts)) ;
 
 % -------------------------------------------------------------------------
 function idx = getNearest(data, centers)
