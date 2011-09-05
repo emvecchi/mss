@@ -1,14 +1,9 @@
 function compute_textons
 
-% Add texton path where to find anigauss
-%path(path, '/home/elia.bruni/google/data_sets/mir/1m/scripts/texton')
-
-
 conf.calDir = '/Users/eliabruni/data/esp/test/input' ;
 conf.dataDir = '/Users/eliabruni/data/esp/test/ouput/texton' ;
 conf.autoDownloadData = false ;
-conf.numTrain = 4 ;
-conf.numTest = 4 ;
+conf.numTrain = 40 ;
 conf.numClasses = 1 ;
 conf.numWords = 256 ;
 conf.numSpatialX = 1 ;
@@ -64,7 +59,7 @@ if ~exist(conf.vocabPath)
   for ii = 1:conf.numTrain 
       
     im = imread(fullfile(conf.calDir, images{ii}));
-    im = standarizeImage(im) ;
+    im = standardizeImage(im) ;
     descrs = MR8fast(im);
     singleDescrs{ii} = vl_colsubset(single(descrs), length(descrs)) ;
     
@@ -113,7 +108,6 @@ end
 
     if mod(ii, blockSize) == 0
         tmpHists = cat(2, hists{:}) ;
-        tmpHists = rot90(tmpHists) ;
         histName = histsNames{ii/blockSize} ;
         eval([histName ' = tmpHists;' ]) ;
         conf.prefix = histsNames{ii/blockSize} ;
@@ -129,7 +123,6 @@ end
 
   end
   tmpHists = cat(2, hists{:}) ;
-  tmpHists = rot90(tmpHists) ;
 
   eval(['ZZZZZZZZZZZZZZZZZZZZ' '= tmpHists;' ]) ;
   % hists = cat(2, hists{:}) ;
@@ -142,7 +135,7 @@ end
 
 
 % -------------------------------------------------------------------------
-function im = standarizeImage(im)
+function im = standardizeImage(im)
 % -------------------------------------------------------------------------
 
 % im = rgb2gray(im) ;
@@ -154,7 +147,7 @@ if size(im,1) > 480, im = imresize(im, [480 NaN]) ; end
 function hist = getImageDescriptor(model, im)
 % -------------------------------------------------------------------------
 
-im = standarizeImage(im) ;
+im = standardizeImage(im) ;
 %width = size(im,2) ;
 %height = size(im,1) ;
 numWords = size(model.vocab, 2) ;
