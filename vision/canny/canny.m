@@ -91,7 +91,7 @@ sDiscreteAngles = b;
 [m,n] = size(sDiscreteAngles);
 
 
-binCounts = {} ;
+binCounts = zeros(1) ;
 
 % each pixel is set to either 1,2,3 or 4
 % set the boundary pixels to 0, so we don't count them in analysis...
@@ -123,7 +123,7 @@ gradDir = 1;
 indxs = find(sDiscreteAngles == gradDir);
 
 counts = size(indxs) ;
-binCounts{1} = counts(1) ;
+binCounts(1) = counts(1) ;
 
 slp = sSlope(indxs);
 
@@ -144,7 +144,8 @@ gradDir = 2;
 indxs = find(sDiscreteAngles == gradDir);
 
 counts = size(indxs) ;
-binCounts{2} = counts(1) ;
+binCounts(2) = counts(1) ;
+
 
 invSlp = 1 ./ sSlope(indxs);
 
@@ -166,7 +167,7 @@ gradDir = 3;
 indxs = find(sDiscreteAngles == gradDir);
 
 counts = size(indxs) ;
-binCounts{3} = counts(1) ;
+binCounts(3) = counts(1) ;
 
 invSlp = 1 ./ sSlope(indxs);
 
@@ -188,7 +189,7 @@ gradDir = 4;
 indxs = find(sDiscreteAngles == gradDir);
 
 counts = size(indxs) ;
-binCounts{4} = counts(1);
+binCounts(4) = counts(1);
 
 slp = sSlope(indxs);
 
