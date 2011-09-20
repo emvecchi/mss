@@ -22,13 +22,13 @@ function binCounts = canny(img, mLow, mHigh, sig)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if (nargin < 1)
-  error(' Need a NxNx3 or NxN image matrix');
+error(' Need a NxNx3 or NxN image matrix');
 elseif (nargin ==1)
-  mLow = 0.5; mHigh = 2.5; sig = 1;
+mLow = 0.5; mHigh = 2.5; sig = 1;
 elseif (nargin == 2)
-  mHigh = 2.5; sig = 1;
+mHigh = 2.5; sig = 1;
 elseif (nargin == 3)
-  sig = 1;
+sig = 1;
 end
 
 
@@ -41,22 +41,22 @@ end
 origImage = img;
 
 if (ndims(img)==3)
-  img =double(rgb2gray(img));
+img =double(rgb2gray(img));
 end
 
 %smoothen ??
 %G = gauss(sig);
 %img = conv2(img, G'*G,'same');
-
-%CONVOLUTION WITH DERIVATIVE OF GAUSSIAN
-
-dG=dgauss(sig);
-
-[dummy, filterLen] = size(dG);
-offset = (filterLen-1)/2;
-
-sy = conv2(img, dG ,'same');
-sx = conv2(img, dG','same');
+			 
+			 %CONVOLUTION WITH DERIVATIVE OF GAUSSIAN
+			 
+			 dG=dgauss(sig);
+			 
+			 [dummy, filterLen] = size(dG);
+			 offset = (filterLen-1)/2;
+			 
+			 sy = conv2(img, dG ,'same');
+			 sx = conv2(img, dG','same');
 
 [m, n]=size(img);
 
@@ -191,6 +191,9 @@ indxs = find(sDiscreteAngles == gradDir);
 counts = size(indxs) ;
 binCounts(4) = counts(1);
 
+% normalize
+binCounts = binCounts/sum(binCounts) ;
+
 slp = sSlope(indxs);
 
 % interpolate between (-1,1) and (-1,0)
@@ -230,14 +233,14 @@ sEdgepoints(x)=1;
 oldx = [];
 x = find(sEdgepoints==1);
 while (size(oldx,1) ~= size(x,1))
-  oldx = x;
-  v = [x+m+1, x+m, x+m-1, x-1, x-m-1, x-m, x-m+1, x+1];
-  sEdgepoints(v) = 0.4 + sEdgepoints(v);
-  y = find(sEdgepoints==0.4);
-  sEdgepoints(y) = 0;
-  y = find(sEdgepoints>=1);
-  sEdgepoints(y)=1;
-  x = find(sEdgepoints==1);
+oldx = x;
+v = [x+m+1, x+m, x+m-1, x-1, x-m-1, x-m, x-m+1, x+1];
+sEdgepoints(v) = 0.4 + sEdgepoints(v);
+y = find(sEdgepoints==0.4);
+sEdgepoints(y) = 0;
+y = find(sEdgepoints>=1);
+sEdgepoints(y)=1;
+x = find(sEdgepoints==1);
 end
 
 
