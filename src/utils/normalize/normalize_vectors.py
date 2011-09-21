@@ -1,7 +1,6 @@
 
 '''
-This program is to combine the features of serveral types
-It works by concatenate line by line of each features file
+This program is to normalize the feature vectors of the given matrices.
 Note: feature file contains numbers of words per line that are described in the following format
 word [space] freq1 freq2 freq3 ... 
 
