@@ -50,14 +50,15 @@ if __name__ == "__main__":
                 oldfeature = ''
                 for j in range(0, old_sizefeat):
                     oldfeature += ' 0'
-                hash[word] = oldfeature + hash[word]
+                hash[word] = oldfeature + feat
+		mark[word] = True
         
         for wordleft in hash.keys():
             if not wordleft in mark:
                 newfeature = ''
                 for j in range(old_sizefeat, sizefeat):
                     newfeature += ' 0'
-                hash[word] += newfeature
+                hash[wordleft] += newfeature
         F.close()
 
     #write the output
