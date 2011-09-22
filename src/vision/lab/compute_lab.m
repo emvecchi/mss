@@ -116,7 +116,7 @@ end
 
 % Count how many times each cluster has been encountered in the image.
 counts = zeros(1,128) ;
-for i = 1:size(colorim,1)
+for i = 1:numel(colorim)
     counts(colorim(i)) = counts(colorim(i)) + 1 ;
 end
 % Normalization
