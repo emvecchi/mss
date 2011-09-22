@@ -1,4 +1,4 @@
-function compute_textons_test
+function hists = compute_textons_test
 
 conf.calDir = '/Users/eliabruni/data/esp/test/input/esp_sample' ;
 conf.dataDir = '/Users/eliabruni/data/esp/test/ouput/textons' ;
@@ -54,7 +54,7 @@ model.classes = classes ;
     im = imread(fullfile(conf.calDir, images{ii}));
     im = standardizeImage(im) ;
     
-    hists{ii - (iter * blockSize)} = uint16(getTextonImage(im, textonNodes));
+    hists{ii - (iter * blockSize)} = getTextonImage(im, textonNodes);
     
     if mod(ii, blockSize) == 0
         tmpHists = cat(1, hists{:}) ;
@@ -114,7 +114,7 @@ else
 end
 
 % -------------------------------------------------------------------------
-function texim = getTextonImage(im, textonNodes)
+function counts = getTextonImage(im, textonNodes)
 % -------------------------------------------------------------------------
 
 if size(im, 3)==3
@@ -131,3 +131,11 @@ idx = getNearest(feat, textonNodes.centers);
 
 
 texim = reshape(idx, size(im));
+
+% Count how many times each cluster has been encountered in the image.
+counts = zeros(1,256) ;
+for i = 1:size(texim,1)
+    counts(texim(i)) = counts(texim(i)) + 1 ;
+end
+% Normalization
+counts = single(counts/sum(counts)) ;
