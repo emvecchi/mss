@@ -1,4 +1,4 @@
-function hists = compute_textons_test
+function compute_textons
 
 conf.calDir = '/Users/eliabruni/data/esp/test/input/esp_sample' ;
 conf.dataDir = '/Users/eliabruni/data/esp/test/ouput/textons' ;
