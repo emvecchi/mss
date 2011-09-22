@@ -134,7 +134,7 @@ texim = reshape(idx, size(im));
 
 % Count how many times each cluster has been encountered in the image.
 counts = zeros(1,256) ;
-for i = 1:size(texim,1)
+for i = 1:numel(texim,1)
     counts(texim(i)) = counts(texim(i)) + 1 ;
 end
 % Normalization
