@@ -1,3 +1,16 @@
+'''
+This program is to compute the top-n nearest neighbors from bless list of word-relation.
+Semantic similarity is measured with cosine similalrity.
+Usage:
+
+@param 1: N of top-n nearest neighbors to extract
+@param 2: bless list in format <concept class relation relatum>
+@param 3: features matrix
+@param 4: ouput file
+
+-----
+'''
+
 import sys, fileinput
 from numpy.linalg import norm
 from numpy import *
@@ -41,16 +54,15 @@ def read_feature_list(feature_list):
 def compute_cosines():
     for word in features:
         if word in bless_words:
-            for relata in features:
-		if relata in bless_types.keys():
-		    if word in cosine_pairs.keys() and word != relata:
-			word_cosines = cosine_pairs[word]
-		        word_cosines[relata] = dot(features[word], features[relata]) / (norm(features[word]) * norm(features[relata]))
-			cosine_pairs[word] = word_cosines
-		    else:
-			word_cosines = {}
-			word_cosines[relata] = dot(features[word], features[relata]) / (norm(features[word]) * norm(features[relata]))
-			cosine_pairs[word] = word_cosines
+            for relatum in bless_types.keys:
+		if word in cosine_pairs.keys() and word != relatum:
+		    word_cosines = cosine_pairs[word]
+		    word_cosines[relatum] = dot(features[word], features[relatum]) / (norm(features[word]) * norm(features[relatum]))
+		    cosine_pairs[word] = word_cosines
+		elif word != relatum:
+		    word_cosines = {}
+	 	    word_cosines[relatum] = dot(features[word], features[relatum]) / (norm(features[word]) * norm(features[relatum]))
+		    cosine_pairs[word] = word_cosines
 
 def get_top(N, output_file):
     global bless_words
@@ -61,8 +73,8 @@ def get_top(N, output_file):
 	    word_cosines = cosine_pairs[word]
 	    sorted(word_cosines, key=word_cosines.__getitem__, reverse=True)
 	    topn = nlargest(N, word_cosines.iteritems(), itemgetter(1))
-	    for relata in topn:
-	        OFILE.write(word + ' ' + bless_types[relata[0]] + ' ' + relata[0] + ': ' + str(relata[1]) + '\n')
+	    for relatum in topn:
+	        OFILE.write(word + ' ' + bless_types[relatum[0]] + ' ' + relatum[0] + ': ' + str(relatum[1]) + '\n')
 	OFILE.write('\n')
     OFILE.close()		
 			
@@ -78,7 +90,8 @@ def get_nearest_neighbors(N, pairs_list, feature_list, output_file):
 if __name__=="__main__":
     _pairs_list = sys.argv[1]
     _feature_list = sys.argv[2]
-    _output_file = sys.argv[3]
+    _N = eval(sys.argv[3])
+    _output_file = sys.argv[4]
 
     get_nearest_neighbors(5, _pairs_list, _feature_list, _output_file)
 
