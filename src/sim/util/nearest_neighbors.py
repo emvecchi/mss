@@ -55,11 +55,11 @@ def compute_cosines():
     for word in features:
         if word in bless_words:
             for relatum in bless_types.keys:
-		if word in cosine_pairs.keys() and word != relatum:
+		if word in cosine_pairs.keys() and word != relatum and relatum in features:
 		    word_cosines = cosine_pairs[word]
 		    word_cosines[relatum] = dot(features[word], features[relatum]) / (norm(features[word]) * norm(features[relatum]))
 		    cosine_pairs[word] = word_cosines
-		elif word != relatum:
+		elif word != relatum and relatum in features:
 		    word_cosines = {}
 	 	    word_cosines[relatum] = dot(features[word], features[relatum]) / (norm(features[word]) * norm(features[relatum]))
 		    cosine_pairs[word] = word_cosines
