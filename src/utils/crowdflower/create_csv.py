@@ -15,7 +15,7 @@ Usage:
 def write_csv(dataset_path, url_path, out_path):
     info = {}   
     for file_path in glob.glob(os.path.join(dataset_path, 'labels/*')):
-	file       = open(file_path, "r")
+	file       = open(file_path, 'r')
 	file_name  = os.path.basename(file_path)
 	image_name = file_name[:-4] + ".jpg"
 	if image_name in info:
