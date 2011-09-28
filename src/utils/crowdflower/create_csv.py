@@ -18,9 +18,6 @@ def write_csv(dataset_path, url_path, out_path):
 	file       = open(file_path, "r")
 	file_name  = os.path.basename(file_path)
 	image_name = file_name[:-4] + ".jpg"
-	print file_name
-	print image_name
-	print 'xxxxxx'
 	if image_name in info:
 	    label = info[image_name]
 	else:
