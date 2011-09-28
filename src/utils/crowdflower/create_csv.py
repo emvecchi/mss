@@ -1,8 +1,9 @@
 import sys, glob, os
 
 """
-This program create a csv file where each row contains an image and one of its associated tag
-<"image_path, tag">
+This program creates a csv file where each row contains an 
+image and one of its associated tag <"image_path, tag">.
+An image has to be in 'jpg' format, a label in 'txt' format.
 
 Usage:
 @param1: dataset directory
@@ -24,8 +25,8 @@ def write_csv(dataset_path, url_path, out_path):
 	    label = info[image_name]
 	else:
 	    label = []
-	for token in file:
-	    label.append(token)
+	for tag in file:
+	    label.append(tag)
 	info[image_name] = label
     data = []
     for image in info:
