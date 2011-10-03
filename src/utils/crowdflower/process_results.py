@@ -49,9 +49,9 @@ def make_samples():
 	    confid = images[image][tag]
 	    if confid == 1:
 	        thresh_1[image]   = tag
-	    elif confid >= 0.51 && confid < 1:
+	    elif confid >= 0.51 and confid < 1:
 		thresh_051[image] = tag
-      	    elif confid >= 0.33 && confid < 0.51:
+      	    elif confid >= 0.33 and confid < 0.51:
 		thresh_033[image] = tag
 	    elif confid == 0:
 		thresh_0[image]   = tag
