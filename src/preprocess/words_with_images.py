@@ -1,14 +1,14 @@
 import glob, os, shutil, sys, random
 
+"""
+Dataset_path must contain one folder called 'original_data', with two subfolders 'images' and 'labels'.
+Images are in '.jpg' format, labels in '.jpg.desc' format (maybe labels' format has to be changed).
+    
+Usage:
+@param1: dataset directory
+"""
 
 def filter_dataset(dataset_path):
-    '''
-    Dataset_path must contain one folder called 'original_data', with two subfolders 'images' and 'labels'.
-    Images are in '.jpg' format, labels in '.jpg.desc' format (maybe labels' format has to be changed).
-    
-    Usage:
-    @param1: dataset directory
-    '''
     preprocessed_path = os.path.join(dataset_path, 'preprocessed')
     os.mkdir(preprocessed_path)
     os.mkdir(os.path.join(preprocessed_path, 'labels'))
@@ -26,7 +26,6 @@ def filter_dataset(dataset_path):
 	shutil.copy(str(file_path), os.path.join(preprocessed_path,'labels', label))
         shutil.copy(str(image_path), os.path.join(preprocessed_path,'images', image))
         file.close()
-
 
 def get_random_string(word_len):
     word = ''
