@@ -1,7 +1,7 @@
 import glob, os, shutil, sys, random
 
 """
-This code assign randomly generated uuid to image-label pairs.
+This code assigns randomly generated uuid to image-label pairs.
 The dataset directory must contain one folder called 'original-data', with two subfolders 'images' and 'labels'.
 Images are in '.jpg' format, labels in '.txt' format.
     
