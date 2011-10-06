@@ -1,5 +1,14 @@
 import glob, os, sys
 
+"""
+Given a list <word lemma pos freq>, this code assign the most frequent 
+pos-tag in the given list to each word of each label in the dataset directory
+    
+Usage:
+@param1: pos list
+@param2: dataset directory
+"""
+
 pos_dic = {}
 pos_freq = {}
 
@@ -18,18 +27,17 @@ def map_pos(pos_list, dataset_path):
     global pos_freq
     pos_file = open(pos_list, "r")
     read_pos_list(pos_list)
-    os.mkdir(os.path.join(dataset_path, 'pos_tagged'))
+    os.mkdir(os.path.join(dataset_path, 'pos-tagged'))
     for file_path in glob.glob(os.path.join(dataset_path, 'label/*.txt')):
-	Ifile = open(file_path, "r")
+	Ifile     = open(file_path, "r")
 	file_name = os.path.basename(file_path)
-	Ofile = open(os.path.join(dataset_path, 'pos_tagged', file_name), "w")
+	Ofile     = open(os.path.join(dataset_path, 'pos-tagged', file_name), "w")
 	for line in Ifile:
 	    tokens = line.split()
 	    for token in tokens:
-	        if pos_freq.has_key(token):
-		    if pos_freq[token] > 100:
-		        Ofile.write(pos_dic[token])
-		        Ofile.write('\n')
+		if pos_freq[token] > 100:
+		    Ofile.write(pos_dic[token])
+		    Ofile.write('\n')
 	Ifile.close()
 	Ofile.close()
 	
