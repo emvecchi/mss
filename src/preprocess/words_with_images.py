@@ -1,8 +1,9 @@
 import glob, os, shutil, sys, random
 
 """
-Dataset_path must contain one folder called 'original_data', with two subfolders 'images' and 'labels'.
-Images are in '.jpg' format, labels in '.jpg.desc' format (maybe labels' format has to be changed).
+This code assign randomly generated uuid to image-label pairs.
+The dataset directory must contain one folder called 'original-data', with two subfolders 'images' and 'labels'.
+Images are in '.jpg' format, labels in '.txt' format.
     
 Usage:
 @param1: dataset directory
